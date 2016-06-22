@@ -10,7 +10,7 @@ import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
-    let numbers = [5, 3, 2, 1, 4]
+    var numbers = [5, 3, 2, 1, 4]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,10 +23,8 @@ class ViewController: UIViewController {
 extension ViewController {
     
     @IBAction func onButtonPressed(sender: AnyObject) {
-        let alert = UIAlertController(title: "Hello", message: "Thanks for pressing me", preferredStyle: .Alert)
-        let action = UIAlertAction(title: "Ok", style: .Default, handler: nil)
-        alert.addAction(action)
-        presentViewController(alert, animated: true, completion: nil)
+        numbers = numbers.shuffle()
+        tableView.reloadData()
     }
 }
 
@@ -41,6 +39,15 @@ extension ViewController: UITableViewDataSource {
         let item = numbers[indexPath.row]
         cell.textLabel?.text = String(item)
         return cell
+    }
+}
+
+// MARK - Array Extension
+extension Array {
+    func shuffle() -> Array {
+        return sort({ (_, _) -> Bool in
+            return arc4random() % 2 == 0
+        })
     }
 }
 
