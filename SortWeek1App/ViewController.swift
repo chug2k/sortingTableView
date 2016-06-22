@@ -23,8 +23,16 @@ class ViewController: UIViewController {
 extension ViewController {
     
     @IBAction func onButtonPressed(sender: AnyObject) {
-        numbers = numbers.shuffle()
-        tableView.reloadData()
+        let newNumbers = numbers.shuffle()
+        tableView.beginUpdates()
+        for num in numbers {
+            let oldIndexPath = NSIndexPath(forRow: numbers.indexOf(num)!, inSection: 0)
+            let newIndexPath = NSIndexPath(forRow: newNumbers.indexOf(num)!, inSection: 0)
+            tableView.moveRowAtIndexPath(oldIndexPath, toIndexPath: newIndexPath)
+        }
+        
+        tableView.endUpdates()
+        numbers = newNumbers
     }
 }
 
@@ -42,12 +50,5 @@ extension ViewController: UITableViewDataSource {
     }
 }
 
-// MARK - Array Extension
-extension Array {
-    func shuffle() -> Array {
-        return sort({ (_, _) -> Bool in
-            return arc4random() % 2 == 0
-        })
-    }
-}
+
 
